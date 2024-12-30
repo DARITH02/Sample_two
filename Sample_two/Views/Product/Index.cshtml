@@ -1,0 +1,147 @@
+﻿@model IEnumerable<Sample_two.Models.Items>
+ 
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Pro_name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Cate_name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Condition)
+            </th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Pro_name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Cate_name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Condition)
+            </td>
+            <td>
+                    <button type="button" class="btn btn-primary" onclick="edite(@item.Id)" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                      Edite
+                    </button>
+                    <button class="btn btn-danger" onclick="delete_item(@item.Id)">Delete</button>
+                    <button class="btn btn-success" data-bs-toggle="modal" onclick="viewDetail(@item.Id)" data-bs-target="#view">
+                        <i class="fa-solid fa-eye"></i>
+                        View
+                    </button>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="Update_form">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <input type="text" name="Id" id="Id" />
+
+                    <div class="form-group">
+                        <label name="Pro_name" id="" class="control-label">Products name</label>
+                        <input name="Pro_name" id="Pro_name" class="form-control" />
+                        <span asp-validation="Pro_name" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label name="Price" class="control-label">Price</label>
+                        <input name="Price" id="Price" class="form-control" />
+                        @* <span asp-validation-for="Price" class="text-danger"></span> *@
+                    </div>
+                    <div class="form-group">
+                        <label name="Status" class="control-label">Status</label>
+                        <input name="Status" id="Status" class="form-control" />
+                        @* <span asp-validation-for="Status" class="text-danger"></span> *@
+                    </div>
+                    <div class="form-group">
+                        <label name="Cate_name" class="control-label">Category</label>
+                        <select id="Cate_name" name="Cate_name" class="form-control">
+                            @foreach (var cate in ViewBag.Cate)
+                            {
+                                <option>@cate.Cate_name</option>
+                            }
+                        </select>
+                        @*    <input name="Cate_name" class="form-control" /> *@
+                        @* <span asp-validation-for="Cate_name" class="text-danger"></span> *@
+                    </div>
+                    <div class="form-group">
+                        <label name="Condition" class="control-label">Condition</label>
+                        <input name="Condition" id="Condition" class="form-control" />
+                        @* <span asp-validation-for="Condition" class="text-danger"></span> *@
+                    </div>
+               <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="update()">Update</button>
+            </div>
+            </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@* View modal *@
+
+
+<div class="modal fade" id="view" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Detaile Item</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+               <table class="table" >
+                    <tbody id="tbl_view">
+
+              </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
