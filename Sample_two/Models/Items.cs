@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 
+
 namespace Sample_two.Models
 {
     public class Items
@@ -12,5 +13,7 @@ namespace Sample_two.Models
         public bool Status{ get; set; }
         public string Cate_name { get; set; }
         public string Condition{ get; set; }
+        public string Img_name { get; set; }
+        public IFormFile Img { get; set; }
     }
 }

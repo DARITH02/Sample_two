@@ -9,17 +9,20 @@ function edite(id) {
         type: "GET",
         data: { id: id },
         success: function (data) {
+          
             $("#Pro_name").val(data['pro_name'])
             $("#Cate_name").prepend(`<option selected hidden value='${data['cate_name']}'>${data['cate_name']}</option>`)
             $("#Status").val(data['status'])
             $("#Condition").val(data['condition'])
             $("#Id").val(data['id'])
             $("#Price").val(data['price'])
+            $("#img_name").val(data['img_name'])
+            $(".img_preview").attr("src", `/images/${data['img_name']}`)
         }
     })
 }
 function update() {
-    var frm = $("#Update_form").serialize();
+    var frm = new FormData($("#Update_form")[0]);
     var id = $("#Id").val()
     $.ajax({
         url: "/Product/Edit",
@@ -27,7 +30,9 @@ function update() {
         data: frm,
         dataType: "JSON",
         processData: false,
+        contentType: false,
         success: function (data) {
+            console.log(data)
             Swal.fire({
                 position: "center",
                 icon: "success",
@@ -35,9 +40,9 @@ function update() {
                 showConfirmButton: false,
                 timer: 1500
             });
-            setTimeout(function () {
+         /*   setTimeout(function () {
                 window.location.reload()
-            },1300)
+            },1300)*/
         }
     })
 }

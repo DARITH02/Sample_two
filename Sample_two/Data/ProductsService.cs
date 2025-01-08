@@ -17,7 +17,7 @@ namespace Sample_two.Data
             List<Items> products = new List<Items>();
             using (SqlConnection conn=new SqlConnection(connectionString))
             {
-                SqlCommand cmd = new SqlCommand("SELECT P.pro_name,P.cate_name,P.pro_id,P.status,P.codition,P.price FROM products P LEFT JOIN category C ON C.cate_name=P.cate_name", conn);
+                SqlCommand cmd = new SqlCommand("SELECT P.pro_name,C.cate_name,P.pro_id,P.status,P.codition,P.price,P.img FROM products P LEFT JOIN category C ON C.cate_name=P.cate_name", conn);
                 
                  conn.Open();
                SqlDataReader rdr= cmd.ExecuteReader();
@@ -30,7 +30,8 @@ namespace Sample_two.Data
                         Pro_name = rdr["pro_name"].ToString() ,
                         Price = Convert.ToDecimal(rdr["price"]),
                         Status = Convert.ToBoolean(rdr["status"]),
-                        Condition = rdr["codition"].ToString()
+                        Condition = rdr["codition"].ToString()    ,
+                        Img_name = rdr["img"].ToString()    ,
 
                     };
                      products.Add(items);
@@ -47,7 +48,7 @@ namespace Sample_two.Data
 
                 List<Category> categories = new List<Category>();
 
-                SqlCommand cmd = new SqlCommand("SELECT * FROM category",conn);
+                SqlCommand cmd = new SqlCommand("SELECT id,cate_name FROM category",conn);
                 conn.Open();
                 SqlDataReader rdr = cmd.ExecuteReader();
  
@@ -70,7 +71,7 @@ namespace Sample_two.Data
 
         public void Products_Insert(Items items)
         {
-            string query = "INSERT INTO products VALUES(@Pro_name,@Price,@Cate_name,@Status,@Condition)";
+            string query = "INSERT INTO products VALUES(@Pro_name,@Price,@Cate_name,@Status,@Condition,@Img)";
 
             SqlConnection conn = new SqlConnection(connectionString);
 
@@ -81,6 +82,17 @@ namespace Sample_two.Data
                 cmd.Parameters.AddWithValue("@Cate_name", items.Cate_name);
                 cmd.Parameters.AddWithValue("@Status", items.Status);
                 cmd.Parameters.AddWithValue("@Condition", items.Condition);
+              //cmd.Parameters.AddWithValue("@Img", items.Img);
+
+
+              /*  byte[] fileBytes;
+                using (var memoryStream = new MemoryStream())
+                {
+                    items.Img.CopyTo(memoryStream);
+                    fileBytes = memoryStream.ToArray();              
+                }
+*/
+                cmd.Parameters.AddWithValue("@Img", items.Img_name);
 
 
                 conn.Open();
@@ -113,6 +125,8 @@ namespace Sample_two.Data
                         Price = Convert.ToDecimal(reader["price"]),
                         Status = Convert.ToBoolean(reader["status"]),
                         Condition = reader["codition"].ToString(),
+                        Img_name = reader["img"].ToString(),
+                    
                     };
                 }
             }
@@ -126,7 +140,7 @@ namespace Sample_two.Data
 
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
-                SqlCommand cmd = new SqlCommand("UPDATE products SET pro_name=@Pro_name,cate_name=@Cate_name,price=@Price,Status=@Status,codition=@Condition WHERE pro_id=@Id", conn);
+                SqlCommand cmd = new SqlCommand("UPDATE products SET pro_name=@Pro_name,cate_name=@Cate_name,price=@Price,Status=@Status,codition=@Condition,img=@Img WHERE pro_id=@Id", conn);
 
                 cmd.Parameters.AddWithValue("@Id", items.Id);
                 cmd.Parameters.AddWithValue("@Pro_name", items.Pro_name);
@@ -134,6 +148,7 @@ namespace Sample_two.Data
                 cmd.Parameters.AddWithValue("@Price", items.Price);
                 cmd.Parameters.AddWithValue("@Status", items.Status);
                 cmd.Parameters.AddWithValue("@Condition", items.Condition);
+                cmd.Parameters.AddWithValue("@Img", items.Img_name);
                 conn.Open();
                 cmd.ExecuteNonQuery();
             }
