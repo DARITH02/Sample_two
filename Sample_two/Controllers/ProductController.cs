@@ -189,7 +189,7 @@ namespace Sample_two.Controllers
 
 
 
-            return Json(itemsUp);
+            return Json(items);
 
       
 
